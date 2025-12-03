@@ -97,7 +97,6 @@ class HomePage extends StatelessWidget {
 
           const SizedBox(height: 35),
 
-          // ***** MENU LIST *****
           Expanded(
             child: ListView(
               children: [

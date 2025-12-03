@@ -40,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              // TITRE
               Text(
                 "Se connecter à un compte",
                 style: TextStyle(
@@ -62,7 +61,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 25),
 
-              // EMAIL
               const Text("Email",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
               ),
@@ -82,7 +80,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 25),
 
-              // MOT DE PASSE
               const Text("Mot de passe",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
               ),
@@ -102,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 40),
 
-              // BOUTON
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -131,7 +127,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 20),
 
-              // Lien login
               Center(
                 child: TextButton(
                  onPressed: () {
@@ -155,7 +150,6 @@ class _LoginPageState extends State<LoginPage> {
   );
 }
 
-// BORDER STYLÉS
 OutlineInputBorder _inputBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(12),

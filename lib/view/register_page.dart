@@ -41,7 +41,6 @@ Widget build(BuildContext context) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              // TITRE
               Text(
                 "Créer un compte",
                 style: TextStyle(
@@ -61,7 +60,6 @@ Widget build(BuildContext context) {
 
               const SizedBox(height: 35),
 
-              // NOM
               const Text("Nom", 
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
               ),
@@ -80,7 +78,6 @@ Widget build(BuildContext context) {
 
               const SizedBox(height: 25),
 
-              // EMAIL
               const Text("Email",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
               ),
@@ -100,7 +97,6 @@ Widget build(BuildContext context) {
 
               const SizedBox(height: 25),
 
-              // MOT DE PASSE
               const Text("Mot de passe",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
               ),
@@ -120,7 +116,6 @@ Widget build(BuildContext context) {
 
               const SizedBox(height: 40),
 
-              // BOUTON
               SizedBox(
                 width: double.infinity,
                 height: 55,
@@ -149,7 +144,6 @@ Widget build(BuildContext context) {
 
               const SizedBox(height: 20),
 
-              // Lien login
               Center(
                 child: TextButton(
                  onPressed: () {
@@ -173,7 +167,6 @@ Widget build(BuildContext context) {
   );
 }
 
-// BORDER STYLÉS
 OutlineInputBorder _inputBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(12),

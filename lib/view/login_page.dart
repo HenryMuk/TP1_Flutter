@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:l4_seance_2/controller/login_controller.dart';
 import 'package:l4_seance_2/view/home_page.dart';
 import 'package:l4_seance_2/view/register_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../auth_service.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -137,19 +140,77 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 25),
 
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterPage()));
-                },
-                child: Text(
-                  "Créer un compte",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
+// Bouton "Créer un compte"
+TextButton(
+  onPressed: () {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterPage()));
+  },
+  child: Text(
+    "Créer un compte",
+    style: TextStyle(
+      color: Colors.white.withOpacity(0.7),
+      fontWeight: FontWeight.w600,
+      fontSize: 15,
+    ),
+  ),
+),
+
+const SizedBox(height: 15),
+
+// Bouton Google Sign-In
+ElevatedButton.icon(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
+    minimumSize: Size(double.infinity, 50), // Largeur max, hauteur 50
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  icon: Image.asset(
+    'assets/images/google_logo.jpg', // ajoute ton icône Google dans assets/
+    height: 24,
+    width: 24,
+  ),
+  label: Text(
+    "Continuer avec Google",
+    style: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+  onPressed: () async {
+    try {
+      // Connexion Google + récupération du credential
+      UserCredential userCredential = await AuthService().signInWithGoogle();
+
+      if (userCredential.user != null) {
+        // Tu peux accéder aux infos de l'utilisateur ici :
+        String? displayName = userCredential.user!.displayName;
+        String? email = userCredential.user!.email;
+        String? photoURL = userCredential.user!.photoURL;
+
+        print("Nom: $displayName");
+        print("Email: $email");
+        print("PhotoURL: $photoURL");
+
+        // Après connexion réussie, redirection vers Menu/Home
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomePage()), // ou MenuPage()
+        );
+      }
+    } catch (e) {
+      print("Erreur Google Sign-In: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Connexion Google échouée")),
+      );
+    }
+  },
+),
+
+
+
             ],
           ),
         ),

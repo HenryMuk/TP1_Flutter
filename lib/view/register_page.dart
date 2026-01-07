@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:l4_seance_2/controller/register_controller.dart';
 import 'package:l4_seance_2/view/home_page.dart';
 import 'package:l4_seance_2/view/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../auth_service.dart';
+
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,7 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
 Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: const Color(0xFFEFF3F7),
+    backgroundColor: const Color(0xFF0D0F12),
     body: Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(25),
@@ -28,25 +31,40 @@ Widget build(BuildContext context) {
           width: 420,
           padding: const EdgeInsets.all(32),
           decoration: BoxDecoration(
-            color: const Color(0xFFEFF3F7),
+            color: Colors.white.withOpacity(0.05),
             borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.08),
+            ),
             boxShadow: [
-              // Ombre supérieure claire
               BoxShadow(
-                color: Colors.white.withOpacity(0.8),
-                offset: const Offset(-10, -10),
-                blurRadius: 20,
-              ),
-              // Ombre inférieure foncée
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                offset: const Offset(10, 10),
-                blurRadius: 20,
+                color: Colors.black.withOpacity(0.7),
+                blurRadius: 40,
+                offset: const Offset(0, 20),
               ),
             ],
           ),
           child: Column(
             children: [
+
+              const SizedBox(height: 10),
+
+              // ***** AVATAR CERCLE *****
+              Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 3,
+                  ),
+                ),
+                child: const CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Color(0xFF1F2430),
+                  child: Icon(Icons.lock_outline, size: 45, color: Colors.white),
+                ),
+              ),
 
               const SizedBox(height: 5),
 
@@ -55,7 +73,7 @@ Widget build(BuildContext context) {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF2A2D33),
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 8),
@@ -64,7 +82,7 @@ Widget build(BuildContext context) {
                 "Créer votre nouveau compte",
                 style: TextStyle(
                   fontSize: 15,
-                  color: Colors.grey.shade600,
+                  color: Colors.white,
                 ),
               ),
 
@@ -105,6 +123,61 @@ Widget build(BuildContext context) {
                 onPressed: _isLoading ? null : _register,
               ),
 
+
+              const SizedBox(height: 15),
+
+// Bouton Google Sign-In
+ElevatedButton.icon(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
+    minimumSize: Size(double.infinity, 50), // Largeur max, hauteur 50
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  icon: Image.asset(
+    'assets/images/google_logo.jpg', // ajoute ton icône Google dans assets/
+    height: 24,
+    width: 24,
+  ),
+  label: Text(
+    "Continuer avec Google",
+    style: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+  onPressed: () async {
+    try {
+      // Connexion Google + récupération du credential
+      UserCredential userCredential = await AuthService().signInWithGoogle();
+
+      if (userCredential.user != null) {
+        // Tu peux accéder aux infos de l'utilisateur ici :
+        String? displayName = userCredential.user!.displayName;
+        String? email = userCredential.user!.email;
+        String? photoURL = userCredential.user!.photoURL;
+
+        print("Nom: $displayName");
+        print("Email: $email");
+        print("PhotoURL: $photoURL");
+
+        // Après connexion réussie, redirection vers Menu/Home
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => HomePage()), // ou MenuPage()
+        );
+      }
+    } catch (e) {
+      print("Erreur Google Sign-In: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Connexion Google échouée")),
+      );
+    }
+  },
+),
+
               const SizedBox(height: 25),
 
               TextButton(
@@ -139,7 +212,7 @@ Widget _label(String text) {
       text,
       style: const TextStyle(
         fontSize: 16,
-        color: Color(0xFF2A2D33),
+        color: Colors.white,
         fontWeight: FontWeight.w600,
       ),
     ),
@@ -153,32 +226,24 @@ Widget _neuField({
   bool obscure = false,
   TextInputType keyboard = TextInputType.text,
 }) {
-  return Container(
-    decoration: BoxDecoration(
-      color: const Color(0xFFEFF3F7),
-      borderRadius: BorderRadius.circular(18),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.white.withOpacity(0.9),
-          offset: const Offset(-5, -5),
-          blurRadius: 12,
-        ),
-        BoxShadow(
-          color: Colors.black.withOpacity(0.08),
-          offset: const Offset(5, 5),
-          blurRadius: 12,
-        ),
-      ],
-    ),
-    child: TextField(
-      controller: controller,
-      obscureText: obscure,
-      keyboardType: keyboard,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey.shade500),
-        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-        border: InputBorder.none,
+  return TextField(
+    controller: controller,
+    obscureText: obscure,
+    keyboardType: keyboard,
+    style: const TextStyle(color: Colors.white),
+    decoration: InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+      filled: true,
+      fillColor: Colors.white.withOpacity(0.07),
+      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: BorderSide(color: Colors.white.withOpacity(0.15)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF00FF9D), width: 2),
       ),
     ),
   );
@@ -197,13 +262,12 @@ Widget _neuButton({
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF3F7),
+        color: const Color(0xFF00FF9D),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.white.withOpacity(0.9),
-            offset: const Offset(-6, -6),
-            blurRadius: 15,
+            color: Colors.white.withOpacity(0.7),
+            
           ),
           BoxShadow(
             color: Colors.black.withOpacity(0.15),

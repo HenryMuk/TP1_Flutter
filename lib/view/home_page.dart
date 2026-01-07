@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:l4_seance_2/view/login_page.dart';
+import 'package:l4_seance_2/view/product_add_page.dart';
+import 'package:l4_seance_2/view/product_list_page.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -93,10 +96,16 @@ class HomePage extends StatelessWidget {
               crossAxisSpacing: 18,
               mainAxisSpacing: 18,
               children: [
-                _buildRoundTile(Icons.person, "Mon Profil", () {}),
-                _buildRoundTile(Icons.settings, "Paramètres", () {}),
-                _buildRoundTile(Icons.help_center, "Support", () {}),
-                _buildRoundTile(Icons.info_outline, "À propos", () {}),
+                _buildRoundTile(Icons.shopping_cart, "Lister les produits", () {Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => ProductListPage()),
+          );}),
+                _buildRoundTile(Icons.post_add, "Ajouter un produit", () { Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => ProductAddPage()),
+          );}),
+                // _buildRoundTile(Icons.help_center, "Support", () {}),
+                // _buildRoundTile(Icons.info_outline, "À propos", () {}),
               ],
             ),
           ),
